@@ -27,7 +27,7 @@ define("SHELL_ROOT", "/var/workspace/Whitening/whitening/public/");
 //arafat
 
 //url coming from here .........imp
- define("ROOT_URL_ADMIN", "/whiteningbar/admin/htdocs/");
+ define("ROOT_URL_ADMIN", "/Whbar/admin/htdocs/");
  // define("ROOT_URL_ADMIN", "http://admin.wb-yoyaku.com/");
 
 define("DOCUMENT_ROOT_ADMIN", "/var/workspace/Whitening/whitening/admin/htdocs/");
