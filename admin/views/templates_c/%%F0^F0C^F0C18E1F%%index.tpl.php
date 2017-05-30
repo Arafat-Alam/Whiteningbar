@@ -1,0 +1,1117 @@
+<?php /* Smarty version 2.6.26, created on 2017-05-25 21:22:08
+         compiled from calendar/index.tpl */ ?>
+<?php require_once(SMARTY_CORE_DIR . 'core.load_plugins.php');
+smarty_core_load_plugins(array('plugins' => array(array('modifier', 'date_format', 'calendar/index.tpl', 785, false),)), $this); ?>
+<?php 
+session_start();
+$_SESSION['page']='calendar';
+$_SESSION['tab']='calendar';
+ ?>
+
+<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "head.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+
+
+
+
+<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "calendar_head_main.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+
+<link rel="stylesheet" type="text/css" href="css/tipsy.css" />
+<script type="text/javascript" src="js/jquery.tipsy.js"></script>
+
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-lightness/jquery-ui.css">
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script> -->
+<script type="text/javascript" src="js/jquery.ui.touch-punch.min.js"></script>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+//setTimeout("location.reload()",1000*60);
+//-->
+</SCRIPT>
+
+
+<?php echo '
+<style type="text/css">
+.ui-draggable-disabled {
+	opacity: 1.0;
+}
+<!--
+-->
+</style>
+
+
+<script type="text/javascript">
+
+
+
+dragmode = 1;
+
+function dispReserve(shop_no,hour,minute,reserve_date,dt){
+
+	document.regForm.action = "/calendar/reserve/";
+	document.regForm.shop_no.value = shop_no;
+	document.regForm.hour.value = hour;
+	document.regForm.minute.value = minute;
+	document.regForm.reserve_date.value = reserve_date;
+	document.regForm.dt.value = dt;
+	$(\'#load-data\').empty();
+	$(\'#loader1\').show();
+	$.ajaxSetup({scriptCharset:"utf-8"});
+	$.ajax({
+		type: "POST",
+		url: "/calendar/reserve/",
+		cache : false,
+		// dataType: "json",
+		dataType: "text",
+		data : {
+			shop_no: shop_no,
+			hour: hour,
+			minute: minute,
+			reserve_date: reserve_date,
+			dt: dt
+			
+		},
+		success: function(data, dataType) {
+			//console.log(data);
+			$(\'#loader1\').hide();
+			$(\'#load-data\').html(data);
+
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			console.log("Error! " + textStatus + " " + errorThrown);
+		}
+	});
+
+	// document.regForm.submit();
+
+
+}
+//=================ajax============
+function getList(){
+
+	target1 = $("#menu");
+	$("#menu_no").remove();
+	$.ajaxSetup({scriptCharset:"utf-8"});
+	$.ajax({
+		type: "POST",
+		url: "/reserve/getMenuList2/",
+		cache : false,
+		dataType: "json",
+		data : {
+			course_no: $("#course_no").val(),
+			menu_no: '; ?>
+<?php if ($this->_tpl_vars['input_data']['menu_no']): ?><?php echo $this->_tpl_vars['input_data']['menu_no']; ?>
+<?php else: ?>0<?php endif; ?><?php echo '
+		},
+		success: function(data, dataType) {
+			//console.log(data);
+			target1.after(data.html);
+			// delete data;
+
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			alert("Error! " + textStatus + " " + errorThrown);
+		}
+	});
+}
+//====================end of ajax============
+function nextDetail(no,dt){
+
+	document.regForm.action = "/reserve/detail/";
+	document.regForm.no.value = no;
+	document.regForm.dt.value = dt;
+	document.regForm.ref.value = "cal";
+
+
+	$(\'#load-data2\').empty();
+	$(\'#loader2\').show();
+
+	$.ajaxSetup({scriptCharset:"utf-8"});
+	$.ajax({
+		type: "POST",
+		url: "/reserve/detail/",
+		cache : false,
+		// dataType: "json",
+		dataType: "text",
+		data : {
+			no: no,
+			dt: dt,
+			ref: "cal"
+			
+		},
+		success: function(data, dataType) {
+			//console.log(data);
+			$(\'#loader2\').hide();
+			$(\'#load-data2\').html(data);
+			delete data;
+
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			console.log("Error! " + textStatus + " " + errorThrown);
+		}
+	});
+
+
+	// document.regForm.submit();
+
+
+}
+
+function dispDetail(aa,bb,cc){
+	//alert(aa+\',\'+bb);
+	// $("#re"+aa+\'_\'+bb+\'_\'+cc).show();
+	var title = $("#re"+aa+\'_\'+bb+\'_\'+cc).val();
+	$("#red"+aa+\'_\'+bb+\'_\'+cc).attr("title",title);
+
+}
+function hideDetail(aa,bb,cc){
+	//alert(aa+\',\'+bb);
+	$("#re"+aa+\'_\'+bb+\'_\'+cc).hide();
+
+}
+
+ids = new Array();
+var agent = navigator.userAgent;
+
+function cfcheck(elem, tx, ty, wid, hgt, sx, sy){
+	if(dragmode == 1){
+		return;
+	}
+
+	for (i = 0; i < ids.length; i++) {
+		if (elem == $(\'#red\' + ids[i]).get(0)) {
+			continue;
+		}
+
+		tright = tx + wid - 4;
+
+		if (Math.abs(ty - $(\'#red\' + ids[i]).offset().top) < 4) {
+			px = $(\'#red\' + ids[i]).offset().left;
+			pr = px + $(\'#red\' + ids[i]).width();
+
+			if(tx < px && tright > px || tx < pr && tright > pr || tx > px && tright < pr || tx < px && tright > pr){
+				alert("予定が重複しています。");
+				$(elem).offset({top:sx, left:sy - 1});
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+$ (function(){
+	$(".tooltip_container").hide();
+
+	queryString = window.location.search || \'\';
+	queryString = queryString.substr(1, queryString.length);
+
+	idx = queryString.indexOf("mode=1");
+	if(idx == -1){
+		dragmode = 1;
+		document.getElementById(\'mmoderadio1\').checked = "checked";
+	}else{
+		dragmode = 2;
+		document.getElementById(\'mmoderadio2\').checked = "checked";
+	}
+
+
+/*
+
+	$(".app-preview").mouseout(function(){
+		$(".tooltip").hide();
+	});
+	$(".app-preview").mouseover(function(){
+
+	});
+*/
+
+'; ?>
+
+<?php $_from = $this->_tpl_vars['arrRsv']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['item']):
+?><?php $_from = $this->_tpl_vars['item']['rsv']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['key'] => $this->_tpl_vars['rsv']):
+?><?php unset($this->_sections['foo']);
+$this->_sections['foo']['name'] = 'foo';
+$this->_sections['foo']['start'] = (int)10;
+$this->_sections['foo']['loop'] = is_array($_loop=22) ? count($_loop) : max(0, (int)$_loop); unset($_loop);
+$this->_sections['foo']['show'] = true;
+$this->_sections['foo']['max'] = $this->_sections['foo']['loop'];
+$this->_sections['foo']['step'] = 1;
+if ($this->_sections['foo']['start'] < 0)
+    $this->_sections['foo']['start'] = max($this->_sections['foo']['step'] > 0 ? 0 : -1, $this->_sections['foo']['loop'] + $this->_sections['foo']['start']);
+else
+    $this->_sections['foo']['start'] = min($this->_sections['foo']['start'], $this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] : $this->_sections['foo']['loop']-1);
+if ($this->_sections['foo']['show']) {
+    $this->_sections['foo']['total'] = min(ceil(($this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] - $this->_sections['foo']['start'] : $this->_sections['foo']['start']+1)/abs($this->_sections['foo']['step'])), $this->_sections['foo']['max']);
+    if ($this->_sections['foo']['total'] == 0)
+        $this->_sections['foo']['show'] = false;
+} else
+    $this->_sections['foo']['total'] = 0;
+if ($this->_sections['foo']['show']):
+
+            for ($this->_sections['foo']['index'] = $this->_sections['foo']['start'], $this->_sections['foo']['iteration'] = 1;
+                 $this->_sections['foo']['iteration'] <= $this->_sections['foo']['total'];
+                 $this->_sections['foo']['index'] += $this->_sections['foo']['step'], $this->_sections['foo']['iteration']++):
+$this->_sections['foo']['rownum'] = $this->_sections['foo']['iteration'];
+$this->_sections['foo']['index_prev'] = $this->_sections['foo']['index'] - $this->_sections['foo']['step'];
+$this->_sections['foo']['index_next'] = $this->_sections['foo']['index'] + $this->_sections['foo']['step'];
+$this->_sections['foo']['first']      = ($this->_sections['foo']['iteration'] == 1);
+$this->_sections['foo']['last']       = ($this->_sections['foo']['iteration'] == $this->_sections['foo']['total']);
+?><?php $this->assign('ji', $this->_sections['foo']['index']); ?>
+<?php $_from = $this->_tpl_vars['rsv'][$this->_tpl_vars['ji']]; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['bango'] => $this->_tpl_vars['jjj']):
+?>
+<?php if (isset ( $this->_tpl_vars['jjj']['no'] )): ?>
+	ids.push('<?php echo $this->_tpl_vars['jjj']['no']; ?>
+_<?php echo $this->_tpl_vars['ji']; ?>
+_<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+');
+<?php endif; ?>
+<?php endforeach; endif; unset($_from); ?><?php endfor; endif; ?><?php endforeach; endif; unset($_from); ?><?php endforeach; endif; unset($_from); ?>
+
+<?php $this->assign('count', 0); ?>
+<?php $_from = $this->_tpl_vars['arr']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['item']):
+?>
+<?php unset($this->_sections['foo']);
+$this->_sections['foo']['name'] = 'foo';
+$this->_sections['foo']['start'] = (int)1;
+$this->_sections['foo']['loop'] = is_array($_loop=$this->_tpl_vars['item']['booth']+1) ? count($_loop) : max(0, (int)$_loop); unset($_loop);
+$this->_sections['foo']['show'] = true;
+$this->_sections['foo']['max'] = $this->_sections['foo']['loop'];
+$this->_sections['foo']['step'] = 1;
+if ($this->_sections['foo']['start'] < 0)
+    $this->_sections['foo']['start'] = max($this->_sections['foo']['step'] > 0 ? 0 : -1, $this->_sections['foo']['loop'] + $this->_sections['foo']['start']);
+else
+    $this->_sections['foo']['start'] = min($this->_sections['foo']['start'], $this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] : $this->_sections['foo']['loop']-1);
+if ($this->_sections['foo']['show']) {
+    $this->_sections['foo']['total'] = min(ceil(($this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] - $this->_sections['foo']['start'] : $this->_sections['foo']['start']+1)/abs($this->_sections['foo']['step'])), $this->_sections['foo']['max']);
+    if ($this->_sections['foo']['total'] == 0)
+        $this->_sections['foo']['show'] = false;
+} else
+    $this->_sections['foo']['total'] = 0;
+if ($this->_sections['foo']['show']):
+
+            for ($this->_sections['foo']['index'] = $this->_sections['foo']['start'], $this->_sections['foo']['iteration'] = 1;
+                 $this->_sections['foo']['iteration'] <= $this->_sections['foo']['total'];
+                 $this->_sections['foo']['index'] += $this->_sections['foo']['step'], $this->_sections['foo']['iteration']++):
+$this->_sections['foo']['rownum'] = $this->_sections['foo']['iteration'];
+$this->_sections['foo']['index_prev'] = $this->_sections['foo']['index'] - $this->_sections['foo']['step'];
+$this->_sections['foo']['index_next'] = $this->_sections['foo']['index'] + $this->_sections['foo']['step'];
+$this->_sections['foo']['first']      = ($this->_sections['foo']['iteration'] == 1);
+$this->_sections['foo']['last']       = ($this->_sections['foo']['iteration'] == $this->_sections['foo']['total']);
+?>
+<?php $this->assign('count', $this->_tpl_vars['count']+1); ?>
+<?php endfor; endif; ?>
+<?php endforeach; endif; unset($_from); ?>
+	rcount = <?php echo $this->_tpl_vars['count']; ?>
+;
+<?php echo '
+
+	setTimeout(function() {
+		gtop = $("#tablecontainer").offset().top + $("#chead").height() + 3;
+		gleft = Math.floor($(".quad").offset().left);
+    }, 200);
+
+	sx = 0;
+	sy = 0;
+
+	grid_x = $("#tablecontainer").width() / 48; // by arafat changed value 48 from 44;
+	grid_y = 51;
+
+	for (i = 0; i < ids.length; i++) {
+        var html = $(\'#re\' + ids[i]).html();
+
+		if(!(agent.search(/iPhone/) != -1 || agent.search(/iPad/) != -1 || agent.search(/iPod/) != -1 || agent.search(/Android/) != -1)){
+			/*$(\'#red\' + ids[i]).tipsy({
+				gravity: \'s\',
+	            html: true,
+				fallback: html
+			});*/ // by arafat for debug drag mood on
+				// alert(dragmode);
+		}
+
+		if(dragmode == 2){
+			$(\'#red\' + ids[i]).draggable({
+				grid: [grid_x, grid_y],
+				containment: \'#tablecontainer\',
+				drag: function(){
+					$(".tipsy").remove();
+				},
+				start: function(){
+					$(".tipsy").remove();
+					sx = $(this).offset().top;
+					sy = $(this).offset().left;
+				},
+				stop: function(){
+					if(Math.floor($(this).offset().top) < Math.floor(gtop)){
+						$(this).offset({top:sx, left:sy - 1});
+					}else{
+						ad_x = $(this).offset().left - 1;
+						ad_y = $(this).offset().top - 1;
+
+						for(x = 0;x < 44;x++){
+							if(Math.abs(ad_x - (x * grid_x + gleft)) < grid_x / 2){
+								ad_x = x * grid_x + gleft;
+								break;
+							}
+						}
+						for(y = 0;y < rcount;y++){
+							if(Math.abs(ad_y - (y * grid_y + gtop)) < 25){
+								ad_y = y * grid_y + gtop + 0.5;
+								break;
+							}
+						}
+
+						$(this).offset({top:ad_y, left:ad_x});
+
+						if(cfcheck(this, $(this).offset().left, $(this).offset().top, $(this).width(), $(this).height(), sx, sy)){
+							datastr = "";
+
+							wx = Math.floor($(this).offset().left + 1 - gleft) / grid_x;
+							wy = Math.floor(($(this).offset().top - gtop) / grid_y);
+
+							wh = Math.floor(wx / 4) + 10;
+							wm = Math.floor(Math.floor(wx % 4) * 15);
+
+							datastr += wy + "," + wh + ":" + wm + "," + $(this).attr("id");
+
+							//$("#bbb").html($.ajax({url: "/calendar/aaa/" + datastr, async: false}).responseText);
+//							alert(datastr);
+
+							if(window.confirm(\'予約時間を変更しますか？\')){
+
+								$.ajaxSetup({scriptCharset:"utf-8"});
+								$.ajax({
+									type: "POST",
+									url: "/calendar/changeReserve/",
+									cache : false,
+									dataType: "json",
+									data : {
+										bango: wy,
+										reserve:wh + ":" + wm,
+										no:$(this).attr("id"),
+
+									},
+									success: function(data, dataType) {
+
+
+										if(data.html==99){
+											alert("予約時間の変更が出来ませんでした");
+
+
+										}
+										else{
+											//成功　リロード
+											alert("予約時間の変更が完了しました");
+
+										}
+
+										location.reload();
+
+									},
+									error: function(xhr, textStatus, errorThrown) {
+										alert("Error! " + textStatus + " " + errorThrown);
+										location.reload();
+									}
+								});
+							}
+							else{
+								//cfcheck(this, $(this).offset().left, $(this).offset().top, $(this).width(), $(this).height(), sx, sy)
+								//cfcheck(elem, tx, ty, wid, hgt, sx, sy)
+								$(this).offset({top:sx, left:sy - 0}); // by arafat change value 1 to 0;
+
+								if(agent.search(/iPhone/) != -1 || agent.search(/iPad/) != -1 || agent.search(/iPod/) != -1 || agent.search(/Android/) != -1){
+									toggledrag(dragmode);
+								}
+
+//								toggledrag(dragmode);
+//								return false;
+							}
+
+
+
+						}
+		//				$(this).offset({top:sx, left:sy});
+					}
+				}
+			});
+		}
+	}
+
+	if(dragmode == 2){
+		$(".drop").sortable();
+	}
+});
+
+  function toggledrag(mode){
+
+	q = window.location.search || \'\';
+	q = q.substr(1, q.length);
+
+	idx = queryString.indexOf("dt");
+
+	if(idx > -1){
+		q = q.substr(0, 13);
+	}else{
+		q = "";
+	}
+
+	for (i = 0; i < ids.length; i++) {
+		if(mode == 1){
+			location.href = "/calendar/list/?" + q;
+		}else{
+			location.href = "/calendar/list/?" + q + "&1=1&mode=1";
+		}
+  	}
+  }
+
+var gmt={};
+gmt["Jan"]="01";
+gmt["Feb"]="02";
+gmt["Mar"]="03";
+gmt["Apr"]="04";
+gmt["May"]="05";
+gmt["Jun"]="06";
+gmt["Jul"]="07";
+gmt["Aug"]="08";
+gmt["Sep"]="09";
+gmt["Oct"]="10";
+gmt["Nov"]="11";
+gmt["Dec"]="12";
+
+// <div id="calContainer">が読み込まれたら処理を開始
+YAHOO.util.Event.onContentReady("calContainer", function() {
+
+  // YAHOO.widget.Calendarインスタンスの生成
+  //var calendar = new YAHOO.widget.Calendar("calContainer","calContainer",{ pagedate:"'; ?>
+<?php echo $this->_tpl_vars['caltdy']; ?>
+<?php echo '",selected:"'; ?>
+<?php echo $this->_tpl_vars['yahooSelDate']; ?>
+<?php echo '" });
+  var calendar = new YAHOO.widget.CalendarGroup("calContainer","calContainer",{ pages: 2, pagedate:"'; ?>
+<?php echo $this->_tpl_vars['caltdy']; ?>
+<?php echo '",selected:"'; ?>
+<?php echo $this->_tpl_vars['yahooSelDate']; ?>
+<?php echo '" });
+
+  // 日付のフォーマットを \'yyyy/mm/dd\' \'yyyy/mm\' にする
+  calendar.cfg.setProperty("MDY_YEAR_POSITION", 1);
+  calendar.cfg.setProperty("MDY_MONTH_POSITION", 2);
+  calendar.cfg.setProperty("MDY_DAY_POSITION", 3);
+  calendar.cfg.setProperty("MY_YEAR_POSITION", 1);
+  calendar.cfg.setProperty("MY_MONTH_POSITION", 2);
+
+  // 「月」「曜日」ラベルを日本語表示にする
+  calendar.cfg.setProperty("MONTHS_SHORT",   ["1\\u6708", "2\\u6708", "3\\u6708", "4\\u6708", "5\\u6708", "6\\u6708", "7\\u6708", "8\\u6708", "9\\u6708", "10\\u6708", "11\\u6708", "12\\u6708"]);
+  calendar.cfg.setProperty("MONTHS_LONG",    ["1\\u6708", "2\\u6708", "3\\u6708", "4\\u6708", "5\\u6708", "6\\u6708", "7\\u6708", "8\\u6708", "9\\u6708", "10\\u6708", "11\\u6708", "12\\u6708"]);
+  calendar.cfg.setProperty("WEEKDAYS_1CHAR", ["\\u65E5", "\\u6708", "\\u706B", "\\u6C34", "\\u6728", "\\u91D1", "\\u571F"]);
+  calendar.cfg.setProperty("WEEKDAYS_SHORT", ["\\u65E5", "\\u6708", "\\u706B", "\\u6C34", "\\u6728", "\\u91D1", "\\u571F"]);
+  calendar.cfg.setProperty("WEEKDAYS_MEDIUM",["\\u65E5", "\\u6708", "\\u706B", "\\u6C34", "\\u6728", "\\u91D1", "\\u571F"]);
+  calendar.cfg.setProperty("WEEKDAYS_LONG",  ["\\u65E5", "\\u6708", "\\u706B", "\\u6C34", "\\u6728", "\\u91D1", "\\u571F"]);
+
+  // 「年/月」ラベルを日本語表示にする
+  calendar.cfg.setProperty("MY_LABEL_YEAR_POSITION",  1);
+  calendar.cfg.setProperty("MY_LABEL_MONTH_POSITION",  2);
+  calendar.cfg.setProperty("MY_LABEL_YEAR_SUFFIX",  "\\u5E74");
+  calendar.cfg.setProperty("MY_LABEL_MONTH_SUFFIX",  "");
+
+
+	//月ページ切り替え
+//  calendar.onChangePage = check;
+  // カレンダーの描画
+  calendar.render();
+
+  calendar.changePageEvent.subscribe(function(type,args) {
+
+ima=calendar.cfg.getProperty("pagedate").split("/");
+mon=ima[0];
+	changeMon=gmt[tmp[1]];
+
+//	  check(calendar.cfg.getProperty();
+	  window.setTimeout(function() {
+		  calendarMenu.show();
+	  }, 0);
+ });
+
+  //日付チェックしたら
+  calendar.selectEvent.subscribe(function(eventName, selectDate){
+	 javascript:location.href="/calendar/list/?dt="+selectDate;
+
+	}, calendar, true);
+
+//二か月用
+function check(target){
+
+	javascript:location.href="/calendar/list/?dt="+dt;
+}
+
+
+
+ //一か月カレンダー用
+//  function check(target){
+//	mm=target.getMonth()+1;
+//	yy=target.getFullYear();
+//	dt=yy+","+mm+",1";
+
+//	javascript:location.href="/calendar/list/?dt="+dt;
+//  }
+
+});
+
+'; ?>
+
+
+</script>
+
+<script type="text/javascript">
+<?php echo '
+function winopn(){
+
+	// sW = window.parent.screen.width;
+	// sH = window.parent.screen.height;
+
+	window.location=\'/calendar/list\';
+}
+$(document).ready(function(){
+    $("#myBtn").click(function(){
+        $("#myModal").modal();
+    });
+
+    $(".weather").click(function(){
+
+    });
+
+});
+function setWeather(city=\'\',tddate=\'\',shop_no=\'\'){
+		$("#myModal").children().removeClass(\'modal-lg\');
+        $("#myModal").children().addClass(\'modal-md\');
+        $("#myModal").modal();
+
+    	$(\'#load-data\').empty();
+		$(\'#loader1\').show();
+	    $.ajaxSetup({scriptCharset:"utf-8"});
+		$.ajax({
+			type: "GET",
+			url: "/calendar/setWeather/",
+			cache : false,
+			 //dataType: "json",
+			dataType: "text",
+			data: {
+				date: tddate,
+				city: city,
+				shop_no: shop_no,
+			},
+			
+			success: function(data,dataType) {
+				//console.log(data);
+				$(\'#loader1\').hide();
+				$(\'#load-data\').html(data);
+
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				// console.log("Error! " + textStatus + " " + errorThrown);
+			}
+		});
+}
+
+'; ?>
+
+</script>
+<?php if ($this->_tpl_vars['back'] == 'back'): ?>
+<script>
+<?php echo '
+$(document).ready(function(){
+	$("#myModal").modal();
+	
+		$(\'#load-data\').empty();
+		$(\'#loader1\').show();
+		$.ajaxSetup({scriptCharset:"utf-8"});
+		$.ajax({
+			type: "GET",
+			url: "/calendar/reserve/?back",
+			cache : false,
+			 //dataType: "json",
+			dataType: "text",
+			
+			success: function(data,dataType) {
+				//console.log(data);
+				$(\'#loader1\').hide();
+				$(\'#load-data\').html(data);
+
+			},
+			error: function(xhr, textStatus, errorThrown) {
+				// console.log("Error! " + textStatus + " " + errorThrown);
+			}
+		});
+});
+
+if (dragmode == 2) {
+}
+'; ?>
+
+</script>
+<?php endif; ?>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body class="yui-skin-sam">
+	<!-- <div id=" wrap" > -->
+	<div id="wrapper">
+
+		<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "header.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+		<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "sidebar.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+
+
+		<div class="content"  style="margin-top: 30px;">
+
+		<div class="container">
+			  <!-- Modal -->
+			  <div class="modal fade col-xs-12 col-sm-12" id="myModal" role="dialog">
+			    <div class="modal-dialog  modal-lg">
+			    
+			      <!-- Modal content-->
+			      <div class="modal-content" align="center">
+			        <div class="modal-header">
+			          <img src="images/loader.gif" id="loader1" style="height: 80px; width: 80px;">
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        </div>
+			        <div class="modal-body" id="load-data" align="center">
+			        </div>
+			        <div class="modal-footer">
+			          <!-- <button type="button" class="btn btn-success" data-dismiss="modal">Close</button> -->
+			        </div>
+			      </div>
+			      
+			    </div>
+			  </div>
+
+
+			  <!-- Modal -->
+			  <!-- <div class="modal fade" id="myModal3" role="dialog">
+			    <div class="modal-dialog modal-lg">
+			    	
+			      < Modal content >
+			      <div class="modal-content" align="center">
+			        <div class="modal-header">
+			          <button type="button" class="close" id="modalBtn" data-dismiss="modal">&times;</button>
+			        </div>
+			         	<img src="images/loader.gif" id="loader1" style="height: 80px; width: 80px;">
+			        <div class="modal-body"  >
+			        </div>
+			        <div class="modal-footer">
+			          <button type="button" class="btn btn-lg" data-dismiss="modal">Close</button>
+			        </div>
+			      </div>
+			      
+			    </div>
+			  </div> -->
+
+			  <!-- MOdal 2 -->
+			  <div class="modal fade" id="myModal2" role="dialog">
+			    <div class="modal-dialog modal-lg">
+			    
+			      <!-- Modal content-->
+			      <div class="modal-content" align="center">
+			        <div class="modal-header">
+			          <button type="button" class="close" data-dismiss="modal">&times;</button>
+			        </div>
+			         	<img src="images/loader.gif" id="loader2" style="height: 80px; width: 80px;">
+			        <div class="modal-body" id="load-data2" align="center">
+			        </div>
+			        <div class="modal-footer">
+			          <!-- <button type="button" class="btn btn-lg" data-dismiss="modal">Close</button> -->
+			        </div>
+			      </div>
+			      
+			    </div>
+			  </div>
+			 </div>
+  			<!-- modal end -->
+			<div class="content-inner clearfix bg-yellow printHide">
+
+				<div class="app-total">
+					<div><img src="images/logo.gif" alt="Whitening Bar ロゴ"></div>
+					<div class="app-today">
+						本日の予約<br><span><?php echo $this->_tpl_vars['reseveCountArr']['day']; ?>
+</span>件
+					</div>
+					<div class="app-month mt10">
+						今月の予約受付数<br><span><?php echo $this->_tpl_vars['reseveCountArr']['mon']; ?>
+</span>件
+					</div>
+				</div>
+
+				<div class="calendar-container">
+					<div id="calContainer"></div>
+				</div>
+
+				<ul class="app-menu">
+					<li><a href="/calendar/list/" class="btn"><i class="fa fa-edit fa-lg"></i>本日の予約</a></li>
+					<li><a href="/calendar/weekly/" class="btn"><i class="fa fa-calendar fa-lg"></i>一週間の予約一覧</a></li>
+					<li><a href="javascript:location.reload();" class="btn"><i class="fa fa-refresh fa-lg"></i>最新の情報に更新</a></li>
+					<!-- <li><a href="javascript:window.close();" class="btn"><i class="fa fa-check fa-lg"></i>予約カレンダーを閉じる</a></li> -->
+					<!--<li><a href="#" class="btn"><i class="fa fa-check fa-lg"></i>過去の予約を全て完了</a></li>  -->
+					<!--<li><a href="newapp.html" class="btn"><i class="fa fa-edit fa-lg"></i>新規予約の作成</a></li>  -->
+				</ul>
+			</div>
+
+			<div class="content-inner clear">
+			<button type="button" onclick="window.print();">印刷する</button>&nbsp;
+				<div class="time-table-box clear">
+					<h1 class="fl"><?php echo $this->_tpl_vars['v_date']; ?>
+</h1>
+					<div class="app-daily-total">予約数<span><?php echo $this->_tpl_vars['reseveCountArr']['day']; ?>
+</span>件</div>
+					<div class="app-daily-total printHide"><input type="radio" name="mmode" id="mmoderadio1" value="1" checked="checked" onclick="toggledrag(1);" /> <label for="mmoderadio1" style="display:inline;">詳細表示</label>　<input type="radio" name="mmode" id="mmoderadio2" value="2" onclick="toggledrag(2);" /> <label for="mmoderadio2" style="display:inline;">移動モード</label></div>
+					<div class="clear">
+						<table class="time-table-shop">
+							<tr>
+								<th>店舗名</th>
+								<td>&nbsp;</td>
+							</tr>
+							<?php $_from = $this->_tpl_vars['arr']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }$this->_foreach['aaa'] = array('total' => count($_from), 'iteration' => 0);
+if ($this->_foreach['aaa']['total'] > 0):
+    foreach ($_from as $this->_tpl_vars['item']):
+        $this->_foreach['aaa']['iteration']++;
+?>
+							<?php unset($this->_sections['foo']);
+$this->_sections['foo']['name'] = 'foo';
+$this->_sections['foo']['start'] = (int)1;
+$this->_sections['foo']['loop'] = is_array($_loop=$this->_tpl_vars['item']['booth']+1) ? count($_loop) : max(0, (int)$_loop); unset($_loop);
+$this->_sections['foo']['show'] = true;
+$this->_sections['foo']['max'] = $this->_sections['foo']['loop'];
+$this->_sections['foo']['step'] = 1;
+if ($this->_sections['foo']['start'] < 0)
+    $this->_sections['foo']['start'] = max($this->_sections['foo']['step'] > 0 ? 0 : -1, $this->_sections['foo']['loop'] + $this->_sections['foo']['start']);
+else
+    $this->_sections['foo']['start'] = min($this->_sections['foo']['start'], $this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] : $this->_sections['foo']['loop']-1);
+if ($this->_sections['foo']['show']) {
+    $this->_sections['foo']['total'] = min(ceil(($this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] - $this->_sections['foo']['start'] : $this->_sections['foo']['start']+1)/abs($this->_sections['foo']['step'])), $this->_sections['foo']['max']);
+    if ($this->_sections['foo']['total'] == 0)
+        $this->_sections['foo']['show'] = false;
+} else
+    $this->_sections['foo']['total'] = 0;
+if ($this->_sections['foo']['show']):
+
+            for ($this->_sections['foo']['index'] = $this->_sections['foo']['start'], $this->_sections['foo']['iteration'] = 1;
+                 $this->_sections['foo']['iteration'] <= $this->_sections['foo']['total'];
+                 $this->_sections['foo']['index'] += $this->_sections['foo']['step'], $this->_sections['foo']['iteration']++):
+$this->_sections['foo']['rownum'] = $this->_sections['foo']['iteration'];
+$this->_sections['foo']['index_prev'] = $this->_sections['foo']['index'] - $this->_sections['foo']['step'];
+$this->_sections['foo']['index_next'] = $this->_sections['foo']['index'] + $this->_sections['foo']['step'];
+$this->_sections['foo']['first']      = ($this->_sections['foo']['iteration'] == 1);
+$this->_sections['foo']['last']       = ($this->_sections['foo']['iteration'] == $this->_sections['foo']['total']);
+?>
+							<tr>
+							<?php if ($this->_sections['foo']['index'] == 1): ?>
+							<?php if ($this->_foreach['aaa']['iteration'] % 2 == 0): ?>
+							<th rowspan="<?php echo $this->_tpl_vars['item']['booth']; ?>
+" class="even">
+							<?php else: ?>
+							<th rowspan="<?php echo $this->_tpl_vars['item']['booth']; ?>
+">
+							<?php endif; ?>
+							<?php echo $this->_tpl_vars['item']['name']; ?>
+<br>
+							<?php if ($this->_tpl_vars['item']['weather'] == ''): ?>
+							<span onclick="setWeather('<?php echo $this->_tpl_vars['item']['city']; ?>
+','<?php echo $this->_tpl_vars['tddate']; ?>
+','<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+')">
+							<?php if ($this->_foreach['aaa']['iteration'] % 2 == 0): ?>
+							<button class="weather">Set Weather</button>
+							<?php else: ?>
+							<button class="weather" style="background-color: #3e8e41;">Set Weather</button>
+							<?php endif; ?>
+							</span>
+							<?php else: ?>
+							<?php echo $this->_tpl_vars['item']['weather']; ?>
+<br>
+							<span onclick="setWeather('<?php echo $this->_tpl_vars['item']['city']; ?>
+','<?php echo $this->_tpl_vars['tddate']; ?>
+','<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+')">
+							<?php if ($this->_foreach['aaa']['iteration'] % 2 == 0): ?>
+							<button class="weather">Update Weather</button>
+							<?php else: ?>
+							<button class="weather" style="background-color: #3e8e41;">Update Weather</button>
+							<?php endif; ?>
+							</span>
+							<?php endif; ?>
+							</th>
+							<?php endif; ?>
+							<?php if ($this->_foreach['aaa']['iteration'] % 2 == 0): ?>
+							<td class="num even">
+							<?php else: ?>
+							<td class="num">
+							<?php endif; ?>
+							<?php echo $this->_sections['foo']['index']; ?>
+</td>
+							</tr>
+							<?php endfor; endif; ?>
+							<?php endforeach; endif; unset($_from); ?>
+						</table>
+
+<form action="" method="post" name="regForm">
+<input type="hidden" name="no" />
+<input type="hidden" name="ref" />
+
+<input type="hidden" name="shop_no" />
+<input type="hidden" name="hour" />
+<input type="hidden" name="minute" />
+<input type="hidden" name="reserve_date" />
+
+<input type="hidden" name="dt" />
+						<div class="table-container" id="tablecontainer">
+							<table class="time-table-app">
+								<tr>
+									<th id="chead">10</th>
+									<th>11</th>
+									<th>12</th>
+									<th>13</th>
+									<th>14</th>
+									<th>15</th>
+									<th>16</th>
+									<th>17</th>
+									<th>18</th>
+									<th>19</th>
+									<th>20</th>
+									<th>21</th>
+								</tr>
+								<?php $_from = $this->_tpl_vars['arrRsv']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }$this->_foreach['aaa'] = array('total' => count($_from), 'iteration' => 0);
+if ($this->_foreach['aaa']['total'] > 0):
+    foreach ($_from as $this->_tpl_vars['item']):
+        $this->_foreach['aaa']['iteration']++;
+?>
+									<?php $_from = $this->_tpl_vars['item']['rsv']; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['key'] => $this->_tpl_vars['rsv']):
+?>
+									<tr>
+									<?php unset($this->_sections['foo']);
+$this->_sections['foo']['name'] = 'foo';
+$this->_sections['foo']['start'] = (int)10;
+$this->_sections['foo']['loop'] = is_array($_loop=22) ? count($_loop) : max(0, (int)$_loop); unset($_loop);
+$this->_sections['foo']['show'] = true;
+$this->_sections['foo']['max'] = $this->_sections['foo']['loop'];
+$this->_sections['foo']['step'] = 1;
+if ($this->_sections['foo']['start'] < 0)
+    $this->_sections['foo']['start'] = max($this->_sections['foo']['step'] > 0 ? 0 : -1, $this->_sections['foo']['loop'] + $this->_sections['foo']['start']);
+else
+    $this->_sections['foo']['start'] = min($this->_sections['foo']['start'], $this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] : $this->_sections['foo']['loop']-1);
+if ($this->_sections['foo']['show']) {
+    $this->_sections['foo']['total'] = min(ceil(($this->_sections['foo']['step'] > 0 ? $this->_sections['foo']['loop'] - $this->_sections['foo']['start'] : $this->_sections['foo']['start']+1)/abs($this->_sections['foo']['step'])), $this->_sections['foo']['max']);
+    if ($this->_sections['foo']['total'] == 0)
+        $this->_sections['foo']['show'] = false;
+} else
+    $this->_sections['foo']['total'] = 0;
+if ($this->_sections['foo']['show']):
+
+            for ($this->_sections['foo']['index'] = $this->_sections['foo']['start'], $this->_sections['foo']['iteration'] = 1;
+                 $this->_sections['foo']['iteration'] <= $this->_sections['foo']['total'];
+                 $this->_sections['foo']['index'] += $this->_sections['foo']['step'], $this->_sections['foo']['iteration']++):
+$this->_sections['foo']['rownum'] = $this->_sections['foo']['iteration'];
+$this->_sections['foo']['index_prev'] = $this->_sections['foo']['index'] - $this->_sections['foo']['step'];
+$this->_sections['foo']['index_next'] = $this->_sections['foo']['index'] + $this->_sections['foo']['step'];
+$this->_sections['foo']['first']      = ($this->_sections['foo']['iteration'] == 1);
+$this->_sections['foo']['last']       = ($this->_sections['foo']['iteration'] == $this->_sections['foo']['total']);
+?>
+										<?php $this->assign('ji', $this->_sections['foo']['index']); ?>
+										<?php if ($this->_foreach['aaa']['iteration'] % 2 == 0): ?>
+										<td class="drop even">
+										<?php else: ?>
+										<td class="drop odd">
+										<?php endif; ?>
+										<span style="color: black;" data-toggle="modal" data-target="#myModal" id="myBtn">
+											<div class="quad" onClick="dispReserve('<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+','<?php echo $this->_tpl_vars['ji']; ?>
+','00','<?php echo $this->_tpl_vars['reserve_date']; ?>
+','<?php echo $this->_tpl_vars['item']['dt']; ?>
+');" id="dispReserve('<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+','<?php echo $this->_tpl_vars['ji']; ?>
+','00','<?php echo $this->_tpl_vars['reserve_date']; ?>
+','<?php echo $this->_tpl_vars['item']['dt']; ?>
+');"></div><div class="quad" onClick="dispReserve('<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+','<?php echo $this->_tpl_vars['ji']; ?>
+','15','<?php echo $this->_tpl_vars['reserve_date']; ?>
+','<?php echo $this->_tpl_vars['item']['dt']; ?>
+');"></div><div class="quad" onClick="dispReserve('<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+','<?php echo $this->_tpl_vars['ji']; ?>
+','30','<?php echo $this->_tpl_vars['reserve_date']; ?>
+','<?php echo $this->_tpl_vars['item']['dt']; ?>
+');"></div><div class="quad" onClick="dispReserve('<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+','<?php echo $this->_tpl_vars['ji']; ?>
+','45','<?php echo $this->_tpl_vars['reserve_date']; ?>
+','<?php echo $this->_tpl_vars['item']['dt']; ?>
+');"></div>
+										</span>
+									<?php $_from = $this->_tpl_vars['rsv'][$this->_tpl_vars['ji']]; if (!is_array($_from) && !is_object($_from)) { settype($_from, 'array'); }if (count($_from)):
+    foreach ($_from as $this->_tpl_vars['bango'] => $this->_tpl_vars['jjj']):
+?>
+									<?php if (isset ( $this->_tpl_vars['jjj']['no'] )): ?>
+									<!-- call for modal from a tag -->
+										<?php if (! isset ( $this->_tpl_vars['jjj']['blockWidth'] )): ?>
+										<?php 
+											if($_GET['mode'] == 1){
+												echo "<span style='color: black;' >";	
+											}else{
+												echo "<span style='color: black;' data-toggle='modal' data-target='#myModal2'>";
+											}
+										 ?>
+										<?php else: ?>
+											<span style='color: black;' >
+										<?php endif; ?>
+											
+												<div onclick="if(dragmode == 1)<?php if (! isset ( $this->_tpl_vars['jjj']['blockWidth'] )): ?>nextDetail(<?php echo $this->_tpl_vars['jjj']['no']; ?>
+,'<?php echo $this->_tpl_vars['item']['dt']; ?>
+')<?php endif; ?>;" onmouseover="dispDetail(<?php echo $this->_tpl_vars['jjj']['no']; ?>
+,<?php echo $this->_tpl_vars['ji']; ?>
+,<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+);" onmouseout="hideDetail(<?php echo $this->_tpl_vars['jjj']['no']; ?>
+,<?php echo $this->_tpl_vars['ji']; ?>
+,<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+);" class="app-preview type<?php echo $this->_tpl_vars['jjj']['rsv_type']; ?>
+" style="left:<?php echo $this->_tpl_vars['jjj']['px']; ?>
+%; background-color : <?php echo $this->_tpl_vars['jjj']['bg']; ?>
+; border: gray solid 0.1px; <?php echo $this->_tpl_vars['jjj']['blockWidth']; ?>
+" id="red<?php echo $this->_tpl_vars['jjj']['no']; ?>
+_<?php echo $this->_tpl_vars['ji']; ?>
+_<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+" >
+													<p><?php echo ((is_array($_tmp=$this->_tpl_vars['jjj']['start_time'])) ? $this->_run_mod_handler('date_format', true, $_tmp, "%H:%M") : smarty_modifier_date_format($_tmp, "%H:%M")); ?>
+<br><span class="bold"><?php if (isset ( $this->_tpl_vars['jjj']['name'] )): ?><?php echo $this->_tpl_vars['jjj']['name']; ?>
+<?php if (isset ( $this->_tpl_vars['jjj']['name_kana'] )): ?>(<?php echo $this->_tpl_vars['jjj']['name_kana']; ?>
+)<?php endif; ?>様<?php endif; ?><?php if ($this->_tpl_vars['jjj']['numb'] > 1): ?>(<?php echo $this->_tpl_vars['jjj']['numb']; ?>
+)<?php endif; ?></span><br><?php echo $this->_tpl_vars['jjj']['menu_name']; ?>
+</p>
+												</div>
+											</span>
+												<div class="tooltip_container"  id="" style="display: none;  color: black; z-index: 999999999999">
+													<div class="tooltip clearfix" style="background-color: white; opacity: .8; ">
+														<dl><!-- マウスオーバー字に吹き出しとして表示させる情報 -->
+															<dt>予約時間</dt>
+															<dd><?php echo ((is_array($_tmp=$this->_tpl_vars['jjj']['start_time'])) ? $this->_run_mod_handler('date_format', true, $_tmp, "%H:%M") : smarty_modifier_date_format($_tmp, "%H:%M")); ?>
+</dd>
+															<dt>お名前</dt>
+															<dd><?php if (isset ( $this->_tpl_vars['jjj']['name'] )): ?><?php echo $this->_tpl_vars['jjj']['name']; ?>
+<?php if (isset ( $this->_tpl_vars['jjj']['name_kana'] )): ?>(<?php echo $this->_tpl_vars['jjj']['name_kana']; ?>
+)<?php endif; ?>様<?php endif; ?></dd>
+															<dt>お電話番号</dt>
+															<dd><?php if (isset ( $this->_tpl_vars['jjj']['tel'] )): ?><?php echo $this->_tpl_vars['jjj']['tel']; ?>
+<?php endif; ?></dd>
+															<dt>メニュー</dt>
+															<dd><?php if (isset ( $this->_tpl_vars['jjj']['menu_name'] )): ?><?php echo $this->_tpl_vars['jjj']['menu_name']; ?>
+<?php endif; ?></dd>
+															<dt>予約番号</dt>
+															<dd><?php echo $this->_tpl_vars['jjj']['reserve_no']; ?>
+</dd>
+														</dl>
+													</div>
+												</div>
+<textarea style="display: none;" id="re<?php echo $this->_tpl_vars['jjj']['no']; ?>
+_<?php echo $this->_tpl_vars['ji']; ?>
+_<?php echo $this->_tpl_vars['item']['shop_no']; ?>
+">
+予約時間 : <?php echo ((is_array($_tmp=$this->_tpl_vars['jjj']['start_time'])) ? $this->_run_mod_handler('date_format', true, $_tmp, "%H:%M") : smarty_modifier_date_format($_tmp, "%H:%M")); ?>
+
+お名前	  : <?php if (isset ( $this->_tpl_vars['jjj']['name'] )): ?><?php echo $this->_tpl_vars['jjj']['name']; ?>
+<?php if (isset ( $this->_tpl_vars['jjj']['name_kana'] )): ?>(<?php echo $this->_tpl_vars['jjj']['name_kana']; ?>
+)<?php endif; ?>様<?php endif; ?>
+
+お電話番号 : <?php if (isset ( $this->_tpl_vars['jjj']['tel'] )): ?><?php echo $this->_tpl_vars['jjj']['tel']; ?>
+<?php endif; ?>
+
+メニュー : <?php if (isset ( $this->_tpl_vars['jjj']['menu_name'] )): ?><?php echo $this->_tpl_vars['jjj']['menu_name']; ?>
+<?php endif; ?>
+
+予約番号 : <?php echo $this->_tpl_vars['jjj']['reserve_no']; ?>
+</textarea>
+									<?php endif; ?>
+									<?php endforeach; endif; unset($_from); ?>
+
+									</td>
+									<?php endfor; endif; ?>
+									</tr>
+									<?php endforeach; endif; unset($_from); ?>
+								<?php endforeach; endif; unset($_from); ?>
+							</table>
+						</div>
+					</form>
+					</div>
+
+				</div><!-- / .time-table-box -->
+			</div><!-- / .content-inner -->
+
+
+		</div><!-- / .content -->
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+<?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "footer.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?>
+<!-- <?php $_smarty_tpl_vars = $this->_tpl_vars;
+$this->_smarty_include(array('smarty_include_tpl_file' => "calendar_footer.tpl", 'smarty_include_vars' => array()));
+$this->_tpl_vars = $_smarty_tpl_vars;
+unset($_smarty_tpl_vars);
+ ?> -->
+
+
+<style type="text/css">
+<?php echo '
+.modal-body {
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+
+	@media print {
+		table { page-break-after:auto }
+		tr    { page-break-inside:avoid; page-break-after:auto }
+		td    { page-break-inside:avoid; page-break-after:auto }
+		thead { display:table-header-group }
+		tfoot { display:table-footer-group }
+
+		header { display: none; }
+		head{ display: none;}
+		h3 { display: none; }
+		button { display: none; }
+		hr { display: none; }
+		/*form { display: none; }*/
+		#header{ display: none; }
+		#jMenu{ display: none; }
+		#footer{ display: none; }
+		.printHide{ display: none; }
+		.search_section{ display: none; }
+		.scrollToTop{ display: none ! important; }
+		.tab{ display: none; }
+		.paging{ display: none; }
+		.left{ display: none; }
+		.right{ display: none; }
+	}
+'; ?>
+
+</style>
+</body>
+</html>

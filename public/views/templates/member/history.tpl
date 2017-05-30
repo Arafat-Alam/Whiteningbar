@@ -1,0 +1,113 @@
+{include file="head.tpl"}
+<title>歯のホワイトニング専門店Whitening Bar　予約受付</title>
+<meta name="Keywords" content="Whitening Bar, ホワイトニング, 歯のホワイトニング, 予約" />
+<meta name="Description" content="歯のホワイトニング専門店Whitening Bar　予約を受け付けいたします。" />
+{include file="head_under.tpl"}
+
+<body>
+	<div id="wrap">
+
+{include file="header.tpl"}
+
+{literal}
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TNFNQV"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TNFNQV');</script>
+<!-- End Google Tag Manager -->
+
+{/literal}
+
+
+		<div class="content">
+		<h1>{$login_member.name}&nbsp;様&nbsp;予約状況</h1>
+			<h2>予約の履歴</h2>
+<!--
+			<div class="content-inner">
+				<select name="">
+					<option>選択してください</option>
+					<option value="渋谷店" selected>渋谷店</option>
+					<option value="自由が丘店">自由が丘店</option>
+				</select>
+				<input type="button" class="btn btn-search" value="表示する"><br>
+				<p class="txt-sm">※選択した店舗のサイトへ移動します。</p>
+			</div>
+-->
+			<div class="content-inner mt50">
+
+
+		{foreach from=$buyCourseArr item=item}
+			【{$item.name}】
+			予約店舗：{$item.shop_name}　
+			購入日：{if $item.buy_date=="0000-00-00"}未払い{else}{$item.buy_date|date_format:"%G/%m/%d"}{/if}　
+			期限：{if $item.limit_date=="0000-00-00"}-{else}{$item.limit_date|date_format:"%G/%m/%d"}{/if}　
+			クーポン：{$item.coupon_name}
+				<div class="table-scroll">
+				<table class="table-appointment mt5 mb20">
+					<tr>
+						<th>予約番号</th>
+						<th>予約日時</th>
+						<th>メニュー</th>
+						<th>ご来店状況</th>
+					</tr>
+					{foreach from=$item.reserve item="res"}
+						<tr>
+							<td>{$res.reserve_no}</td>
+							<td>
+								{$res.reserve_date} {$res.start_time|date_format:"%H:%M"}～{$res.end_time|date_format:"%H:%M"}
+							</td>
+							<td>{$res.menu_name}</td>
+							<td>
+								{if $res.visit_flg==1}
+									ご来店
+								{elseif $res.visit_flg==99}
+									キャンセル
+								{else}
+									ご予約中
+								{/if}
+							</td>
+
+						</tr>
+					{/foreach}
+					</table>
+					</div>
+		{foreachelse}
+表示する履歴一覧はありません
+		{/foreach}
+
+				<div class="tc mt35"><a href="/member/" class="btn btn-lg">マイページへ</a></div>
+			</div>
+		</div>
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+	<p id="page-top" style="display: block;">
+		<a href="#wrap"><span><i class="fa fa-arrow-up fa-4x"></i></span></a>
+	</p>
+
+{include file="footer.tpl"}
+<script type="text/javascript" charset="UTF-8" src="//navicast.jp/NavicastApi.js?pbeldad"></script>
+
+{literal}
+
+<script type="text/javascript">
+  (function () {
+    var tagjs = document.createElement("script");
+    var s = document.getElementsByTagName("script")[0];
+    tagjs.async = true;
+    tagjs.src = "//s.yjtag.jp/tag.js#site=07eYmz4";
+    s.parentNode.insertBefore(tagjs, s);
+  }());
+</script>
+
+<noscript>
+<iframe src="//b.yjtag.jp/iframe?c=07eYmz4" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+</noscript>
+
+{/literal}
+</body>
+</html>

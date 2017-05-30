@@ -1,0 +1,138 @@
+{include file="head.tpl"}
+<title>歯のホワイトニング専門店Whitening Bar　予約受付</title>
+<meta name="Keywords" content="Whitening Bar, ホワイトニング, 歯のホワイトニング, 予約" />
+<meta name="Description" content="歯のホワイトニング専門店Whitening Bar　予約を受け付けいたします。" />
+
+<script src="https://zipaddr.googlecode.com/svn/trunk/zipaddr7.js" charset="UTF-8"></script>
+
+{include file="head_under.tpl"}
+<script type="text/javascript">
+<!--
+{literal}
+
+function getNumberList(){
+
+	target = $("#number_select");
+
+	$("#number").remove();
+
+	$.ajaxSetup({scriptCharset:"utf-8"});
+	$.ajax({
+		type: "POST",
+		url: "/reserve/getNumber/",
+		cache : false,
+		dataType: "json",
+		data : {
+			shop_no: $("#shop_no").val(),
+			menu_no: 0
+		},
+		success: function(data, dataType) {
+
+			target.after(data.html);
+
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			alert("Error! " + textStatus + " " + errorThrown);
+		}
+	});
+
+}
+
+jQuery( function() {
+		getNumberList();
+} );
+
+
+{/literal}
+-->
+</script>
+
+<body>
+	<div id="wrap">
+{include file="header.tpl"}
+
+現在未使用
+
+
+		<div class="content">
+		<h1>予約の変更</h1>
+		<form action="/reserve/regist/" method="post">
+			<h2>予約の変更</h2>
+			<div class="content-inner">
+
+		{if $result_messages}
+			{foreach from=$result_messages item=item}
+				<span class="txt-red txt-sm">{$item}</span><br />
+			{/foreach}
+		{/if}
+
+
+				<table class="table mt10">
+					<tr>
+						<th>予約店舗</th>
+						<td>
+							{$input_data.shop_name}
+							<input type="hidden" name="shop_no" value="{$input_data.shop_no}" id=shop_no>
+						</td>
+					</tr>
+					<tr>
+						<th>予約日時&nbsp;<span class="label">必須</span></th>
+						<td>
+					 		{if $result_messages.password}
+								<span class="txt-red txt-sm">{$result_messages.password}</span><br />
+							{/if}
+				<input name="reserve_date" value="{$input_data.reserve_date}" class="fieldset__input js__datepicker datepicker" type="text" placeholder="クリックして日付を選択">
+				<input name="start_time" value="{$input_data.start_time|date_format:'%H:%M'}"  class="fieldset__input js__timepicker timepicker" type="text" placeholder="クリックして時間を選択">
+						</td>
+					</tr>
+					<tr>
+						<th>メニュー&nbsp;<span class="label">必須</span></th>
+						<td>
+				          {html_options name=menu_no options=$menuArr selected=$input_data.menu_no}
+				        </td>
+					</tr>
+
+					<tr>
+						<th>人数&nbsp;<span class="label">必須</span></th>
+						<td>
+				          <div id=number_select></div><!-- 人数プルダウンの表示　各店舗のブース数　 -->
+				        </td>
+					</tr>
+				</table>
+				<div class="tc mt35">
+					<input name="submit" type="submit" class="btn btn-lg" value="予約を変更します">
+					<input type="hidden" name="no" value="{$input_data.no}">
+				</div>
+			</div>
+		</form>
+		</div>
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+	<p id="page-top" style="display: block;">
+		<a href="#wrap"><span><i class="fa fa-arrow-up fa-4x"></i></span></a>
+	</p>
+
+{include file="footer.tpl"}
+	<!-- date time picker -->
+	<script src="/js/legacy.js"></script>
+	<script src="/js/picker.js"></script>
+	<script src="/js/picker.date.js"></script>
+	<script src="/js/picker.time.js"></script>
+	<script src="/js/ja_JP.js"></script>
+	<script>
+	{literal}
+		$('.datepicker').pickadate({
+			format: 'yyyy/mm/dd'
+		})
+		$('.timepicker').pickatime({
+			　clear: '消去',
+			 format: 'H:i',
+			 interval: 15,
+			 min: [10,0],
+   		 max: [20,15]
+		})
+		{/literal}
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,380 @@
+@CHARSET "utf-8";
+
+body{ color:#333;}
+h3 {
+	background-color: #428BCA;
+	color:white;
+	/*margin-bottom:10px;*/
+	margin:0 0 10px 0;
+	font-size:12pt;
+	padding:5px 3px;
+	border-radius:4px;
+	-webkit-border-radius:4px;
+	text-indent:10px;
+}
+h4 {
+	background-color: #5BC0DE;
+	color:white;
+	margin-bottom:10px;
+	font-size:11pt;
+	padding:5px 3px;
+	border-radius:4px;
+	-webkit-border-radius:4px;
+	text-indent:10px;
+}
+table {
+	border-collapse: collapse;
+	font-size: 10pt;
+}
+th {
+	border: solid 1px silver;
+	padding:3px;
+	background-color: #D9EDF7;
+}
+td {
+	border: solid 1px silver;
+	padding:3px;
+}
+a {
+    color: #428BCA;
+    text-decoration: none;
+}
+a:hover, a:focus {
+    color: #2A6496;
+    text-decoration: underline;
+}
+button, input[type="submit"], input[type="button"], input[type="reset"]{ padding:3px 10px; cursor:pointer;}
+#wrapper {
+	margin: 0 auto;
+	/*width:95%;*/
+	width:960px;
+}
+#sidebar {
+	font-size:11pt;
+	float:left;
+	width:180px;
+	background-color:#EEEEEE;
+	padding:3px;
+	/*position:relative;*/
+	border-radius:5px;
+	-webkit-border-radius:5px;
+	padding:5px;
+}
+#sidebar ul{
+	margin:10px 0;
+	padding:0;
+}
+#sidebar li{
+	display:block;
+}
+#sidebar a{
+	display:block;
+	padding:2px 10px;
+}
+#sidebar a:hover{
+	background:#DDDDDD;
+	text-decoration:none;
+}
+
+#main_content {
+	/*margin-left:200px;*/
+	/*vartical-align: top;*/
+	float:left;
+	margin-left:20px;
+	width:750px;
+}
+#footer {
+	padding-top:10px;
+	border-top: solid 1px lightgrey;
+	font-size:9pt;
+	text-align:center;
+}
+
+div#h1_title {}
+div#h1_title_left {
+	float:left;
+	width:500px;
+	padding:4px;
+	vertical-align:top;
+	font-size:16pt;
+	font-weight: bold;
+}
+div#h1_title_right {
+	float: right;
+	padding:4px;}
+div#h1_title_end {
+	clear: both;
+	border:solid 1px #a9a9a9;
+	margin-bottom:10px;
+}
+div.header_user_info {
+	font-size: 10pt;
+}
+div#footer {
+	min-height:100px;
+}
+
+div.center {
+	margin-left:auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+div.paging {
+	margin-top:10px;
+	margin-bottom:10px;
+	font-size: 10pt;
+	border-bottom: solid 1px #a9a9a9;
+	padding:0 0 20px 0;
+}
+div.paging div.left {
+	float:left;
+	width:50%;
+	text-align: left;
+}
+div.paging div.right {
+	margin-left:50%;
+	text-align: right;
+}
+div.paging div.end {text-align: right;}
+
+span.explain {
+	color: #008080;
+	font-size: 10pt;
+}
+
+/* メッセージ表示 */
+div.header_msg_base{
+	margin-bottom:10px;
+}
+div.header_msg_error{
+	padding:3px;
+	font-weight:bold;
+	background-color:red;
+	border-bottom:dotted 1px;
+}
+div.header_msg_valid {
+	padding:3px;
+	font-weight:bold;
+	background-color:#f08080;
+	border-bottom:dotted 1px;
+}
+div.header_msg_warn{
+	padding:3px;
+	font-weight:bold;
+	background-color:pink;
+	border-bottom:dotted 1px;
+}
+div.header_msg_info{
+	padding:3px;
+	font-weight:bold;
+	background-color:mediumspringgreen;
+	border-bottom:dotted 1px;
+}
+div.h2msg{
+	background-color: yellowgreen;
+	padding:3px;
+	font-size:11pt;
+	margin-bottom:10px;
+}
+
+/* ログイン画面 */
+table.tbl_login {
+	width:40%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-bottom: 10px;
+}
+table.tbl_login th{
+	width: 30%;
+	text-align: right;
+}
+
+/* 検索用テーブル */
+table.tbl_search {margin-bottom:20px;}
+table.tbl_search th {white-space:nowrap;}
+table.tbl_search td {}
+
+/* リスト用テーブル */
+table.list {
+	width:100%;
+	margin-bottom:10px;
+}
+table.list th {}
+table.list td {text-align: left;}
+
+table.search {margin-bottom:10px;}
+
+/* 詳細表示テーブル */
+table.detail {margin-bottom:10px;}
+table.detail th {
+	width:30%;
+	text-align: right;
+	white-space:nowrap;
+}
+table.detail td {
+	width:70%;
+	text-align: left;
+}
+
+/* 商品詳細 */
+div.product_part {
+	padding:5px;
+	border: solid 1px lightgrey;
+	margin-bottom: 10px;
+	font-size:10pt;
+}
+div.product_part table.file_list {width: 100%;}
+div.product_part table.file_list th.name{width: 70%;}
+div.product_part table.file_list th.sort{width: 10%;}
+div.product_part table.file_list th.type{width: 10%;}
+div.product_part table.file_list th.del{width: 10%;}
+
+table.set_products {
+	width: 100%;
+	margin-bottom:10px;
+}
+table.set_products th.no{width: 5%;}
+table.set_products th.product_id{width: 20%;}
+table.set_products th.product_name{width: 25%;}
+table.set_products th.category{width: 25%;}
+table.set_products th.price{width: 10%;}
+table.set_products th.quantity{width: 5%;}
+table.set_products th.del{width: 10%;}
+
+/* 在庫表マトリックス */
+table.stock-matrix {
+	min-width: 150px;
+}
+table.stock-matrix th {
+	text-align: center;
+	width: 100px;
+	font-size: 10pt;
+}
+table.stock-matrix td {
+	text-align: center;
+	width: 100px;
+}
+
+/* 商品カテゴリ属性リスト */
+tr.category-attr-group-row table {width: 100%;}
+tr.category-attr-group-row table th {width: 40%;}
+tr.category-attr-group-row table td {width: 60%;}
+
+/* 商品タグリスト */
+div#product-edit-tag-list .group-part {margin-bottom: 10px;}
+div#product-edit-tag-list .group-name {font-weight:bold;}
+div#product-edit-tag-list .tag-name {margin-left:20px;}
+
+/* カテゴリツリー */
+ul.category_tree {
+	list-style-type: none;
+	font-size:10pt;
+}
+ul.category_tree li {
+	margin-bottom: 10px;
+}
+ul.category_tree li table th {
+	border: solid 1px #a9a9a9;
+	background-color: lightgrey;
+	padding: 3px;
+	min-width: 100px;
+	text-align:left;
+}
+ul.category_tree li table td {border: solid 1px #a9a9a9; padding: 3px;}
+
+/* 管理者一覧 */
+#manager-list .id {width: 20%;}
+#manager-list .type {width: 20%;}
+#manager-list .name {width: 20%;}
+#manager-list .email {width: 20%;}
+#manager-list .del {width: 20%;}
+
+/* 支払方法 */
+table#payment-method .id {width: 10%;}
+table#payment-method .name {width: 15%;}
+table#payment-method .explain {width: 45%;}
+table#payment-method .sort {width: 10%;}
+table#payment-method .del {width: 10%;}
+
+/* お知らせ */
+table#news .title {width: 75%;}
+table#news .date {width: 15%;}
+table#news .del {width: 10%;}
+
+/* 売上サマリ */
+table#summary {width:60%; font-size:10pt;}
+table#summary .date {width:60%;}
+table#summary .sum {width: 40%;}
+table#summary .total {font-weight:bold; border-top: double 4px;}
+
+/* システム設定 */
+table#sys-config {width: 70%;}
+table#sys-config th {width: 40%;}
+table#sys-config td {width: 60%;}
+
+/* 商品 */
+table#product .id {width: 20%;}
+table#product .name {width: 30%;}
+table#product .price {width: 10%;}
+table#product .category {width: 20%;}
+table#product .display {width: 10%;}
+table#product .del {width: 10%;}
+table#product td span.set_flg {color: blue;}
+
+/* ブランド */
+table#brand .name {width: 90%;}
+table#brand .del {width: 10%;}
+
+/* メーカー */
+table#maker .name {width: 90%;}
+table#maker .del {width: 10%;}
+
+/* 注文 */
+table#order .no {width: 10%;}
+table#order .date {width: 15%;}
+table#order .name {width: 10%;}
+table#order .address {width: 20%;}
+table#order .tel {width: 10%;}
+table#order .quantity {width: 10%;}
+table#order .amount {width: 10%;}
+table#order .payment {width: 10%;}
+
+/* 商品タググループ */
+table#product-tag-group .name {width: 20%;}
+table#product-tag-group .tags {width: 30%;}
+table#product-tag-group .tags {width: 40%;}
+table#product-tag-group .del {width: 10%;}
+
+/* 商品タグ */
+table#product-tag {width: 100%;}
+table#product-tag .sort {width: 10%;}
+table#product-tag .name {width: 40%;}
+table#product-tag .attr1 {width: 40%;}
+table#product-tag .del {width: 10%;}
+
+/* カテゴリ属性グループ */
+table#category-attr-group {width: 100%;}
+table#category-attr-group .sort {width: 5%;}
+table#category-attr-group .name {width: 15%;}
+table#category-attr-group .attr {width: 70%;}
+table#category-attr-group .del {width: 5%;}
+
+/* カテゴリ属性 */
+table#category-attr {width: 100%;}
+table#category-attr .sort {width: 10%;}
+table#category-attr .name {width: 40%;}
+table#category-attr .measure {width: 15%;}
+table#category-attr .data_type {width: 15%;}
+table#category-attr .del {width: 10%;}
+
+
+
+/*レイアウト調整*/
+.clear{
+	clear:both;
+}
+.allCheck{
+	margin-bottom:20px;
+	font-size:14px;
+}

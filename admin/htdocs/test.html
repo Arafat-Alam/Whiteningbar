@@ -1,0 +1,80 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script>
+  $(function(){
+ $("body").append('<div class="graylayer"></div>');
+ $(".graylayer").click(function(){
+  $(this).fadeOut();
+  $('.window').fadeOut();
+ })
+ $('#aaa').click(function(){
+ var secHeight = $(".window").height() *0.5
+ var secWidth = $(".window").width() *0.5
+ var Heightpx = secHeight * -1;
+ var Widthpx = secWidth * -1;
+ $(".graylayer").fadeIn();
+
+ $(".window").fadeIn().css({
+  "margin-top" : Heightpx + "px" ,
+  "margin-left" : Widthpx + "px"
+ });
+ return false;
+})
+})
+</script>
+
+<style>
+html,body {
+ font-family:Lucida sans , "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif;
+ margin: 0;
+ padding: 0;
+ }
+#container{
+ width:100px;
+ margin:100px auto;
+}
+
+button{
+ width: 80px;
+ padding: 10px;
+ background-color: #c9c9c9;
+ border-radius: 4px;
+}
+
+.graylayer{
+ display:none;
+ position: fixed;
+ top:0;
+ left:0;
+ height:100%;
+ width:100%;
+ background-color: #000;
+ opacity:.7;
+ filter(alpha=70);
+ }
+.window{
+ padding: 20px;
+ display:none;
+ position: fixed;
+ top: 50%;
+ left:50%;
+ filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#99ffffff,EndColorStr=#99ffffff);
+ background-color: rgba(255, 255, 255, 0.5);
+ font-size: 1.5em;
+ color: #fff;
+ text-shadow:rgba(0,0,0,.8) -1px -1px;
+ border-radius: 5px;
+ z-index: 20;
+}
+</style>
+<body>
+ <div id="container">
+  <button>顧客情報</button>
+  <a href="javascript:void();"  id="aaa">aaa</a>
+  <section class="window">
+		あああ
+		いいい
+
+
+  </section>
+ </div>
+</body>

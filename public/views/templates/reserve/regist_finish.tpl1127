@@ -1,0 +1,52 @@
+{include file="head.tpl"}
+<title>歯のホワイトニング専門店Whitening Bar　予約受付</title>
+<meta name="Keywords" content="Whitening Bar, ホワイトニング, 歯のホワイトニング, 予約" />
+<meta name="Description" content="歯のホワイトニング専門店Whitening Bar　予約を受け付けいたします。" />
+
+{include file="head_under.tpl"}
+<script type="text/javascript">
+<!--
+{literal}
+
+
+
+{/literal}
+-->
+</script>
+
+<body>
+<img src="https://px.moba8.net/svt/sales?async=1&PID=m00000004829001&SO={$reserve_no}&SI=1.1.1.yoyaku" width="1" height="1" />
+<img src="https://cnt.threewave.jp/TW/Controller/ActionCountCmd?t=100002906&u={$reserve_no}" width="0" height="0">
+
+	<div id="wrap">
+{include file="header.tpl"}
+
+		<div class="content">
+		<h1>予約をする</h1>
+			<h2>予約の完了</h2>
+			<div class="content-inner">
+				<p class="tc mt50">予約{$modi_str}を受付いたしました。<br>
+				<span class="txt-lg">{$reserve_datail.shop_name}&nbsp;&nbsp;{$reserve_datail.reserve_date}&nbsp;&nbsp;
+				{$reserve_datail.start_time}&nbsp;～{$reserve_datail.end_time}</span></p>
+				<p class="tc mt10">{$input_data.name_kana}様のご来店をお待ちしております。</p>
+				<div class="tc mt50">
+					{if $login_member}
+					<a href="/member/" class="btn btn-lg">マイページへ</a>
+					{else}
+					<a href="/" class="btn btn-lg">TOPへ</a>
+					{/if}
+
+				</div>
+			</div>
+
+		</div>
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+	<p id="page-top" style="display: block;">
+		<a href="#wrap"><span><i class="fa fa-arrow-up fa-4x"></i></span></a>
+	</p>
+
+{include file="footer.tpl"}
+
+</body>
+</html>

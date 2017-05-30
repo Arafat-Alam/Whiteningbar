@@ -1,0 +1,410 @@
+{include file="calendar_head.tpl"}
+<script type="text/javascript">
+<!--
+{literal}
+
+function winopn(no){
+	window.open('/member/member_regist/?ref=cal&no='+no, 'mywindow', 'width=1200, height=900, menubar=no, toolbar=no, scrollbars=yes');
+}
+function winopnSearch(no){
+	window.open('/reserve/member_search/?ref=cal&no='+no, 'mywindow', 'width=1200, height=900, menubar=no, toolbar=no, scrollbars=yes');
+}
+
+function getList(){
+
+	target1 = $("#coupon");
+	//$(".category_m_id").remove();
+	$("#coupon_id").remove();
+	$.ajaxSetup({scriptCharset:"utf-8"});
+	$.ajax({
+		type: "POST",
+		url: "/member/getCouponList/",
+		cache : false,
+		dataType: "json",
+		data : {
+			p_coupon_id: $("#p_coupon_id").val(),
+		},
+		success: function(data, dataType) {
+			target1.after(data.html);
+
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			alert("Error! " + textStatus + " " + errorThrown);
+		}
+	});
+}
+
+function getBoothList(){
+
+	target2 = $("#rev_booth");
+	$("#booth").remove();
+	$.ajaxSetup({scriptCharset:"utf-8"});
+	$.ajax({
+		type: "POST",
+		url: "/reserve/getBooth/",
+		cache : false,
+		dataType: "json",
+		data : {
+			shop_no: $("#shop_no").val(),
+			menu_no: $("#menu_no").val(),
+		},
+		success: function(data, dataType) {
+			target2.after(data.html);
+
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			alert("Error! " + textStatus + " " + errorThrown);
+		}
+	});
+}
+
+jQuery(document).ready(function(){
+
+	if($("#shop_no").val()){
+		getBoothList();
+
+	}
+
+
+	 $("body").append('<div class="graylayer"></div>');
+	 $(".graylayer").click(function(){
+	  $(this).fadeOut();
+	  $('.window').fadeOut();
+	 })
+	 $('#aaa').click(function(){
+	 var secHeight = $(".window").height() *0.5
+	 var secWidth = $(".window").width() *0.5
+	 var Heightpx = secHeight * -1;
+	 var Widthpx = secWidth * -1;
+	 $(".graylayer").fadeIn();
+
+	 $(".window").fadeIn().css({
+	  "margin-top" : Heightpx + "px" ,
+	  "margin-left" : Widthpx + "px"
+	 });
+	 return false;
+	})
+
+
+});
+
+{/literal}
+//-->
+</script>
+<style>
+{literal}
+html,body {
+ font-family:Lucida sans , "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif;
+ margin: 0;
+ padding: 0;
+ }
+#container{
+ width:100px;
+ margin:100px auto;
+}
+
+.graylayer{
+ display:none;
+ position: fixed;
+ top:0;
+ left:0;
+ height:100%;
+ width:100%;
+ background-color: #000;
+ opacity:.7;
+ filter(alpha=70);
+ }
+.window{
+ padding: 30px 40px;
+ display:none;
+ position: fixed;
+ top: 50%;
+ left:50%;
+ filter: progid:DXImageTransform.Microsoft.Gradient(GradientType=0,StartColorStr=#99ffffff,EndColorStr=#99ffffff);
+ background-color: rgba(255, 255, 255, 1);
+ font-size: 1.1em;
+ /*color: #fff;*/
+ /*text-shadow:rgba(0,0,0,.8) -1px -1px;*/
+ border-radius: 5px;
+ z-index: 20;
+}
+{/literal}
+</style>
+
+</head>
+
+<body>
+	<div id="wrap">
+		<div class="content content-form">
+		<form action="/reserve/detail/" method="post">
+			<div class="content-inner">
+			<h1>予約</h1>
+
+			{if $finish_flg==1}
+			{include file="messages.tpl"}
+			{/if}
+
+
+				<div class="tc mt35">
+				<input type="button" class="btn btn-lg btn-gray" value="戻る" onclick="location.href='/calendar/list/{$param}'">&nbsp;&nbsp;
+{if $del_flg!=1}<!-- 予約削除後は戻るボタンのみ表示 -->
+				<input name="submit" type="submit" class="btn btn-lg" value="更新する" >
+				<input name="del_submit" type="submit" class="btn btn-lg" value="予約の削除" onClick="return confirm('予約を削除します。複数人で予約している場合は全ての予約を削除します。良いでしょうか？');">
+{/if}
+				</div>
+				<br />
+				<table class="table new-app">
+					<tr>
+						<th>お名前&nbsp;<span class="label">必須</span></th>
+						<td>
+
+
+						  {if $db_data.member_id==0}
+						  	{if $input_data.member_name}
+						  		{$input_data.member_name}　様
+						  		<input type="hidden" name="member_id" value="{$input_data.member_id}">
+						  	{/if}
+				          	<a href="javascript:void(0);" onClick="winopn('{$input_data.no}')" class="btn btn-search">初めての方</a>　/　
+				          	<a href="javascript:void(0);" onClick="winopnSearch('{$input_data.no}')" class="btn btn-search"><i class="fa fa-search"></i>&nbsp;
+				          	会員から検索</a>
+
+				          {else}
+				          	{$memArr.member_no}/{if $memArr.name}{$memArr.name}{else}{$memArr.name_kana}{/if}
+				          	(TEL:{if $memArr.tel}{$memArr.tel}{else}-{/if})
+				          	<a href="javascript:void();"  id="aaa" class="btn btn-search">顧客情報を見る</a>
+
+				          {/if}
+</td>
+					</tr>
+					<tr>
+						<th>予約日時&nbsp;<span class="label">必須</span></th>
+						<td>
+							<!--{$db_data.reserve_date} {$db_data.start_time|date_format:"%H:%M"}～{$db_data.end_time|date_format:"%H:%M"}  -->
+
+	 		{if $result_messages.reserve_date}
+				<span class="txt-red txt-sm">{$result_messages.reserve_date}</span><br />
+			{/if}
+	 		{if $result_messages.start_time}
+				<span class="txt-red txt-sm">{$result_messages.start_time}</span><br />
+			{/if}
+
+						<input class="fieldset__input js__datepicker datepicker" type="text" placeholder="クリックして日付を選択" name="reserve_date" value="{$input_data.reserve_date}">
+						<input class="fieldset__input js__timepicker timepicker" type="text" placeholder="クリックして時間を選択" name="start_time" value="{$input_data.start_time}">
+
+						</td>
+					</tr>
+					<tr>
+						<th>予約店舗名&nbsp;<span class="label">必須</span></th>
+						<td>
+						{$db_data.shop_name}
+						<input type="hidden" name=shop_no value="{$input_data.shop_no}" id="shop_no" >
+						<!--
+						{html_options name=shop_no options=$shopArr selected=$input_data.shop_no  onChange="getBoothList()" id="shop_no"}
+						-->
+						</td>
+					</tr>
+					<tr>
+						<th>予約人数&nbsp;<span class="label">必須</span></th>
+						<td>
+							<div id="rev_booth"></div>
+
+
+						</td>
+					</tr>
+					<tr>
+						<th>コース名/使用クーポン&nbsp;<span class="label">必須</span></th>
+						<td>
+							{if $db_data.fee_flg==0}
+								{if $courseArr}
+									{html_options name=buy_no options=$courseArr selected=$input_data.buy_no  }
+								{else}
+									コース未払い
+								{/if}
+							{else}
+					          	{$db_data.course_name} /
+					          	{if $db_data.coupon_name}
+					          		{$db_data.coupon_name}
+					          	{else}
+					          		-
+					          	{/if}
+					        {/if}
+						</td>
+					</tr>
+					<tr>
+						<th>メニュー名&nbsp;<span class="label">必須</span></th>
+						<td>
+							{html_options name=menu_no options=$menuArr selected=$input_data.menu_no id=menu_no}
+
+<!--
+				         	{if $db_data.menu_name}
+								{$db_data.menu_name}({$db_data.raiten_cnt}回)
+							{else}
+								{html_options name=menu_no options=$menuArr }
+
+							{/if}
+ -->
+						</td>
+					</tr>
+        {foreach from=$memPayArr item=item}
+          <tr>
+          <th>{$item.name}</th>
+          <td>
+          <input type="checkbox" name="pay[{$item.id}]" value="1" {if $payArr && $item.id|in_array:$payArr}checked{/if}   /></td>
+        </tr>
+        {/foreach}
+       <tr>
+          <th>電話確認</th>
+          <td>
+ 				{html_radios name=tel_flg options=$telArr selected=$input_data.tel_flg separator=''}
+           </td>
+        </tr>
+					<tr>
+						<th>来店チェック</th>
+						<td>
+						<input type="radio" name="visit_flg" value="1" {if $input_data.visit_flg==1}checked{/if}  />来店　
+						<input type="radio" name="visit_flg" value="99" {if $input_data.visit_flg==99}checked{/if}  />キャンセル　
+						<input type="radio" name="visit_flg" value="0" {if $input_data.visit_flg==0}checked{/if}  />予約中
+<!--
+						<ul>
+						    <li><input type="radio" name="visit_flg" value="1" {if $input_data.visit_flg==1}checked{/if}  />来店</li>
+				          	<li><input type="radio" name="visit_flg" value="99" {if $input_data.visit_flg==99}checked{/if}  />キャンセル</li>
+				          	<li><input type="radio" name="visit_flg" value="0" {if $input_data.visit_flg==0}checked{/if}  />予約中</li>
+						</ul>
+-->
+						</td>
+					</tr>
+        <tr>
+          <th>担当者</th>
+			<td>
+			 	{html_options name=staff_no options=$staffArr selected=$input_data.staff_no}
+			</td>
+        </tr>
+
+					<tr>
+						<th>管理用備考</th>
+						<td><textarea name="kanri_comment" rows="" cols="">{$input_data.kanri_comment}</textarea>
+						<br><font size=1>※お客様個人に対してのコメントです。</font>
+						</td>
+					</tr>
+        <tr>
+          <th>予約時管理用備考</th>
+          <td>
+				{$input_data.reserve_kanri_comment}
+				<br><font size=1>※予約を行う際に入力した管理者用の備考コメントです</font>
+			</td>
+        </tr>
+
+				</table>
+
+				<div class="tc mt35">
+				<input type="button" class="btn btn-lg btn-gray" value="戻る" onclick="location.href='/calendar/list/{$param}'">&nbsp;&nbsp;
+{if $del_flg!=1}<!-- 予約削除後は戻るボタンのみ表示 -->
+				<input name="submit" type="submit" class="btn btn-lg" value="更新する" >
+				<input name="del_submit" type="submit" class="btn btn-lg" value="予約の削除" onClick="return confirm('予約を削除します。複数人で予約している場合は全ての予約を削除します。良いでしょうか？');">
+{/if}
+				</div>
+			</div>
+        <input type="hidden" name="no" value="{$input_data.no}" >
+        <input type="hidden" name="ref" value="cal" >
+		<input type="hidden" name="dt" value="{$dt}" >
+		</form>
+		</div>
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+
+  <section class="window"><!-- モーダル表示部分 -->
+<table class="table">
+
+       <tr>
+          <th>現在のコース消費数</th>
+          <td>
+				{foreach from=$memArr.reserve item=item}
+                      	<div class="mb5">
+						{$item.name}/残{$item.zan}回
+						</div>
+				{/foreach}
+          </td>
+        </tr>
+       <tr>
+          <th>メールアドレス</th>
+          <td>
+          {$memArr.email}
+          </td>
+        </tr>
+		<tr>
+			<th>住所</th>
+			<td>{$memArr.zip}<br />{$memArr.address1}{$memArr.address2}</td>
+		</tr>
+         <tr>
+          <th>性別</th>
+          <td>
+				{if $memArr.sex==1}男性{/if}
+				{if $memArr.sex==2}女性{/if}
+			</td>
+        </tr>
+        <tr>
+          <th>生年月日</th>
+          <td>
+          	{$memArr.year}
+            年
+            {$memArr.month}
+            月
+            {$memArr.day}
+            日
+            </td>
+        </tr>
+        <tr>
+          <th>ご紹介者</th>
+          <td>
+          {$memArr.intro}
+        </tr>
+        <tr>
+          <th>お客様備考</th>
+          <td>
+				{$memArr.comment}
+			</td>
+        </tr>
+         <tr>
+          <th>歯磨き粉</th>
+          <td>
+				{if $memArr.tooth_flg==1}１種類{/if}
+				{if $memArr.tooth_flg==2}２種類{/if}
+			</td>
+        </tr>
+         <tr>
+          <th>管理用備考</th>
+          <td>
+				{$memArr.kanri_comment}
+			</td>
+        </tr>
+
+</table>
+  </section>
+
+{include file="calendar_footer.tpl"}
+
+
+<!-- date time picker -->
+	<script src="/js/legacy.js"></script>
+	<script src="/js/picker.js"></script>
+	<script src="/js/picker.date.js"></script>
+	<script src="/js/picker.time.js"></script>
+	<script src="/js/ja_JP.js"></script>
+	<script>
+	{literal}
+		$('.datepicker').pickadate({
+			format: 'yyyy/mm/dd'
+		})
+		$('.timepicker').pickatime({
+			　clear: '消去',
+			 format: 'H:i',
+			 interval: 15,
+			 min: [10,0],
+   		 max: [20,15]
+		})
+	{/literal}
+	</script>
+
+
+</body>
+</html>

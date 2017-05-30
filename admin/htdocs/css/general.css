@@ -1,0 +1,51 @@
+@charset "utf-8";
+/* CSS Document */
+.clear {
+	clear: both;
+}
+/******************************************************レイアウト*/
+
+.fl {
+	float: left;
+}
+.fr {
+	float: right;
+}
+.tl {
+	text-align: left;
+}
+.tr {
+	text-align: right;
+}
+.tc {
+	text-align: center;
+}
+.center{
+	margin:0 auto;
+}
+/******************************************************余白*/
+.mt5{margin-top:5px;}
+.mt10{margin-top:10px;}
+.mt15{margin-top:15px;}
+.mt20{margin-top:20px;}
+.mt25{margin-top:25px;}
+.mt30{margin-top:30px;}
+.mt35{margin-top:35px;}
+.mt50{margin-top:50px;}
+.mb5 {	margin: 0 0 5px;}
+.mb10 {	margin-bottom:10px;}
+.mb20 {	margin-bottom:20px;}
+.mb30 {	margin: 0 0 30px;}
+.mb40 {	margin: 0 0 40px;}
+.mb50 {	margin: 0 0 50px;}
+.mb60 {	margin: 0 0 60px;}
+.mr30{ margin-right:30px;}
+.p10 {	padding: 10px;}
+.p20 {	padding: 20px;}
+.p30 {	padding: 30px;}
+/******************************************************フォント*/
+.f28{font-size:28px;}
+.f21{font-size:21px;}
+.bold {	font-weight: bold;}
+.justify{text-align:justify;}
+

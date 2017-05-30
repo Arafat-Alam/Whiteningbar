@@ -1,0 +1,164 @@
+{include file="head.tpl"}
+<title>歯のホワイトニング専門店Whitening Bar　予約受付</title>
+<meta name="Keywords" content="Whitening Bar, ホワイトニング, 歯のホワイトニング, 予約" />
+<meta name="Description" content="歯のホワイトニング専門店Whitening Bar　予約を受け付けいたします。" />
+{include file="head_under.tpl"}
+<script src="https://zipaddr.googlecode.com/svn/trunk/zipaddr7.js" charset="UTF-8"></script>
+
+<body>
+	<div id="wrap">
+
+{include file="header.tpl"}
+
+{literal}
+
+<!-- Google Tag Manager -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TNFNQV"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TNFNQV');</script>
+<!-- End Google Tag Manager -->
+
+{/literal}
+
+
+		<div class="content">
+		<h1>{$login_member.name}&nbsp;様&nbsp;登録情報変更</h1>
+
+
+		<form action="" method="post">
+			<h2>基本情報</h2>
+			<div class="content-inner">
+
+		{if $result_messages}
+			{foreach from=$result_messages item=item}
+				<span class="txt-red txt-sm">{$item}</span><br />
+			{/foreach}
+		{/if}
+
+
+				<p>変更したい項目を再入力後、「変更」ボタンをクリックしてください。</p>
+				<table class="table mt10">
+					<tr>
+						<th>メールアドレス(ログインID）&nbsp;<span class="label">必須</span></th>
+						<td>
+							 {if $result_messages.email}
+								<span class="txt-red txt-sm">{$result_messages.email}</span><br />
+							{/if}
+
+						<input name="email" value="{$input_data.email}" type="text" class="form-lg"></td>
+					</tr>
+					<tr>
+						<th>お名前&nbsp;<span class="label">必須</span></th>
+						<td>
+					 		{if $result_messages.name}
+								<span class="txt-red txt-sm">{$result_messages.name}</span><br />
+							{/if}
+
+							<input  name="name" value="{$input_data.name}"  type="text"></td>
+					</tr>
+					<tr>
+						<th>ふりがな&nbsp;<span class="label">必須</span></th>
+						<td>
+					 		{if $result_messages.name_kana}
+								<span class="txt-red txt-sm">{$result_messages.name_kana}</span><br />
+							{/if}
+
+							<input name="name_kana" value="{$input_data.name_kana}" type="text"></td>
+					</tr>
+					<tr>
+						<th>電話番号&nbsp;<span class="label">必須</span></th>
+						<td>
+					 		{if $result_messages.tel}
+								<span class="txt-red txt-sm">{$result_messages.tel}</span><br />
+							{/if}
+						<input name="tel" value="{$input_data.tel}"  type="text"></td>
+					</tr>
+					<tr>
+						<th>住所&nbsp;<span class="label">建物名以外必須</span></th>
+						<td>
+							 {if $result_messages.zip}
+								<span class="txt-red txt-sm">{$result_messages.zip}</span><br />
+							{/if}
+					          <span class="address">郵便番号</span>
+					          <input type="text" id="zip" name="zip" value="{$input_data.zip}"  class="form-sm"><br>
+					          <span class="address"></span><span class="txt-sm">
+					          【住所自動入力】<br />
+					          郵番を入力すると、住所の一部が自動入力されます。<br />ハイフン有無、半角・全角、どれでも入力可能です。
+					          <br />入力履歴では自動入力が出来ませんのでご注意ください。
+					          </span><br>
+
+							<span class="address">都道府県</span>{html_options name=pref options=$prefArr selected=$input_data.pref id="pref"}<br>
+							<span class="address">市区町村・番地</span><input  id="city" name="address1" value="{$input_data.address1}" type="text" class="form-lg mt5"><br>
+							<span class="address">建物名</span><input name="address2" value="{$input_data.address2}" type="text" class="form-lg mt5">
+						</td>
+					</tr>
+					<tr>
+						<th>性別&nbsp;<span class="label">必須</span></th>
+						<td>
+							<label><input type="radio"  name="sex" value="1" {if $input_data.sex==1}checked{/if} />男性</label>
+							<label><input type="radio"  name="sex" value="2" {if $input_data.sex==2}checked{/if} />女性</label>
+						</td>
+					</tr>
+					<tr>
+						<th>生年月日&nbsp;<span class="label">必須</span></th>
+						<td>
+						    {html_options name="year" options=$yearArr selected=$input_data.year class="form-sm"}
+				            年
+				            {html_options name="month" options=$monthArr selected=$input_data.month class="form-sm"}
+				            月
+				            {html_options name="day" options=$dayArr selected=$input_data.day class="form-sm"}
+				            日
+						</td>
+					</tr>
+<!--
+					<tr>
+						<th>お店からのお知らせメール&nbsp;<br class="pc"><span class="label">必須</span></th>
+						<td>
+							<label><input type="radio"  name="mail_flg" value="1" {if $input_data.mail_flg==1}checked{/if} />希望する</label>
+							<label><input type="radio"  name="mail_flg" value="0" {if $input_data.mail_flg==0}checked{/if} />希望しない</label>
+						</td>
+					</tr>
+ -->
+					<tr>
+						<th>備考</th>
+						<td><textarea name="comment" rows="" cols="">{$input_data.comment}</textarea></td>
+					</tr>
+				</table>
+				<div class="tc mt35"><input name="submit" type="submit" class="btn btn-lg" value="変更"></div>
+			</div>
+		</form>
+
+
+		</div>
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+	<p id="page-top" style="display: block;">
+		<a href="#wrap"><span><i class="fa fa-arrow-up fa-4x"></i></span></a>
+	</p>
+
+{include file="footer.tpl"}
+<script type="text/javascript" charset="UTF-8" src="//navicast.jp/NavicastApi.js?pbeldad"></script>
+
+{literal}
+
+<script type="text/javascript">
+  (function () {
+    var tagjs = document.createElement("script");
+    var s = document.getElementsByTagName("script")[0];
+    tagjs.async = true;
+    tagjs.src = "//s.yjtag.jp/tag.js#site=07eYmz4";
+    s.parentNode.insertBefore(tagjs, s);
+  }());
+</script>
+
+<noscript>
+<iframe src="//b.yjtag.jp/iframe?c=07eYmz4" width="1" height="1" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe>
+</noscript>
+
+{/literal}
+</body>
+</html>

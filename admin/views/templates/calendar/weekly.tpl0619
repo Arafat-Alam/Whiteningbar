@@ -1,0 +1,118 @@
+{include file="calendar_head.tpl"}
+
+<script type="text/javascript">
+<!--
+{literal}
+
+
+$ (function(){
+
+	$(".tooltip").hide();
+
+	$(".app-preview").mouseout(function(){
+		$(".tooltip").hide();
+	});
+	$(".app-preview").mouseover(function(){
+
+	});
+
+});
+
+{/literal}
+//-->
+</script>
+
+
+
+</head>
+
+<body class="yui-skin-sam">
+	<div id="wrap">
+
+		<div class="content">
+			<div class="content-inner clearfix bg-yellow">
+
+				<div class="app-total">
+					<div><img src="/images/logo.gif" alt="Whitening Bar ロゴ"></div>
+				</div>
+			</div>
+
+		{foreach from=$arrRsv name=aaa key=keyRev item=p_arrRev}
+			<div class="content-inner clear">
+			<button onClick="window.close();">閉じる</button>
+				<div class="time-table-box clear">
+					<h1 class="fl">{$v_dateArr.$keyRev}</h1>
+					<div class="app-daily-total">予約数<span>{$reseveCountArr.$keyRev.day}</span>件</div>
+					<div class="clear">
+						<table class="time-table-shop">
+							<tr>
+								<th>店舗名</th>
+								<td>&nbsp;</td>
+							</tr>
+{foreach from=$arr item=item}
+{section name=foo start=1 loop=$item.booth+1}
+<tr>
+{if $smarty.section.foo.index==1}
+<th rowspan="{$item.booth}">{$item.name}</th>
+{/if}
+<td class="num">{$smarty.section.foo.index}</td>
+</tr>
+{/section}
+{/foreach}
+</table>
+
+						<div class="table-container">
+							<table class="time-table-app">
+								<tr>
+									<th>10</th>
+									<th>11</th>
+									<th>12</th>
+									<th>13</th>
+									<th>14</th>
+									<th>15</th>
+									<th>16</th>
+									<th>17</th>
+									<th>18</th>
+									<th>19</th>
+									<th>20</th>
+								</tr>
+
+								{foreach from=$p_arrRev item=item}
+									{foreach from=$item.rsv key=key item=rsv}
+									<tr>
+									{section name=foo start=10 loop=21}
+										{assign var="ji" value=$smarty.section.foo.index}
+										<td>
+										<div class="quad" ></div><div class="quad" > </div><div class="quad" > </div><div class="quad" > </div>
+
+											{foreach from=$rsv.$ji key=bango item=jjj}
+											{if isset($jjj.no)}
+												<div class="app-preview type{$jjj.rsv_type}" style="left:{$jjj.px}%;background-color : {$jjj.bg}" >
+													<p></p>
+												</div>
+											{/if}
+											{/foreach}
+										</td>
+									{/section}
+
+									</tr>
+									{/foreach}
+								{/foreach}
+							</table>
+						</div>
+					</div>
+				</div><!-- / .time-table-box -->
+			</div><!-- / .content-inner -->
+			{/foreach}
+
+
+
+		</div><!-- / .content -->
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+
+{include file="calendar_footer.tpl"}
+
+
+</body>
+</html>

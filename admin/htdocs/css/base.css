@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, p, blockquote, th, td {
+	margin: 0;
+	padding: 0;
+}
+h1, h2, h3, h4, h5, p, ul, ol, li, dl, dt, dd, form {
+	font-weight: normal;
+}
+html {
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+}
+body{
+	font-family: 'Hiragino Kaku Gothic ProN', "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Helvetica, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	font-size: 14px;
+	height: 100%;
+	line-height: 1.7;
+	color: #222222;
+}
+input, select, option {
+	font-family: 'Hiragino Kaku Gothic ProN', "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, Helvetica, Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+	font-size: 14px;
+	line-height: 1.7;
+	color: #222222;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-weight: normal;
+	font-size: 1.0em;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+th {
+	text-align: left;
+	font-weight: normal;
+}
+img {
+	vertical-align: bottom;
+	border: 0;
+}
+p{ word-break:normal; }
+li {
+	list-style-type: none;
+}
+a {
+	color: #444444;
+	text-decoration: none;
+	/*transition: all 0.5s ease 0s;*/
+}
+a:hover {
+	filter: alpha(opacity=80);
+	-moz-opacity: 0.80;
+	opacity: 0.80;
+}
+/*a:hover img {
+	filter: alpha(opacity=80);
+	-moz-opacity: 0.80;
+	opacity: 0.80;
+}*/
+
+
+
+/******************************************************clearfix*/
+.clearfix:after {
+	content: " ";
+	font-size: 0.1em;
+	line-height: 0;
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+.clearfix {
+	display: inline-block;
+}
+* html .clearfix {
+	height: 1%;
+}
+.clearfix {
+	display: block;
+}
+
+
+/****************************************************** txt */
+.txt-xlg{font-size:1.6em;}
+.txt-lg{font-size:1.4em;}
+.txt-md{font-size:1.2em;}
+.txt-sm{font-size:0.9em;}
+.txt-xs{font-size:0.85em;}
+.txt-xxs{font-size:0.75em;}
+
+/******************************************************各パーツ*/
+.navbar-fixed-top {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 10;
+	margin-bottom: 0;
+}
+html, body {
+	height: 100%;/* The html and body elements cannot have any padding or margin. */
+}
+hr{
+	border:none;
+	border-top:1px solid #666;
+}
+#page-top {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+}
+
+
+/* Sticky footer styles
+-------------------------------------------------- */
+
+html,body {
+  height: 100%;
+ /* The html and body elements cannot have any padding or margin. */
+}
+
+/* Wrapper for page content to push down footer */
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+   	/* Negative indent footer by it's height */
+	margin: 0 auto -40px;
+}
+
+ /* Set the fixed height of the footer here */
+#push,
+#footer {
+	height: 40px;
+}

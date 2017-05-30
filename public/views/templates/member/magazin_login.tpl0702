@@ -1,0 +1,50 @@
+{include file="head.tpl"}
+<title>歯のホワイトニング専門店Whitening Bar　予約受付</title>
+<meta name="Keywords" content="Whitening Bar, ホワイトニング, 歯のホワイトニング, 予約" />
+<meta name="Description" content="歯のホワイトニング専門店Whitening Bar　予約を受け付けいたします。" />
+{include file="head_under.tpl"}
+
+<body>
+	<div id="wrap">
+
+{include file="header.tpl"}
+
+		<div class="content">
+		<h1>配信停止</h1>
+
+		<form action="" method="post">
+			<h2>配信停止</h2>
+
+<span class="txt-red txt-sm">{$result_messages}</span><br />
+
+			<div class="content-inner">
+				<p>新しいパスワードを入力して「変更」ボタンをクリックしてください。</p>
+				<table class="table mt10">
+					<tr>
+						<th>ご登録メールアドレス&nbsp;<span class="label">必須</span></th>
+						<td>
+					          <input type="text" id="" name="email" value="{$input_data.email}"  />
+						</td>
+					</tr>
+					<tr>
+						<th>パスワード&nbsp;<span class="label">必須</span></th>
+						<td>
+					          <input type="password" id="" name="password" value="{$input_data.password}"  />
+						</td>
+					</tr>
+				</table>
+				<div class="tc mt35"><input name="submit" type="submit" class="btn btn-lg" value="ログイン"></div>
+			</div>
+		</form>
+
+		</div>
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+	<p id="page-top" style="display: block;">
+		<a href="#wrap"><span><i class="fa fa-arrow-up fa-4x"></i></span></a>
+	</p>
+
+{include file="footer.tpl"}
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+{include file="head.tpl"}
+<title>歯のホワイトニング専門店Whitening Bar　予約受付</title>
+<meta name="Keywords" content="Whitening Bar, ホワイトニング, 歯のホワイトニング, 予約" />
+<meta name="Description" content="歯のホワイトニング専門店Whitening Bar　予約を受け付けいたします。" />
+{include file="head_under.tpl"}
+<body>
+	<div id="wrap">
+{include file="header.tpl"}
+
+		<div class="content">
+		<h1>予約をする</h1>
+	 		{if $result_messages}
+				<span class="txt-red txt-sm">{$result_messages}</span><br />
+			{/if}
+
+			<div class="box-half clearfix fl heightLine-group1">
+			<form action="" method="post">
+				<div class="box-inner">
+					<h2>登録済みの方</h2>
+					<p>ログインID(メールアドレス)とパスワードを入力してください。</p>
+					<p class="txt-sm">パスワードをお忘れの方は<a href="/member/password/"><span class="txt-red">こちらをクリックしてください</span></a></p>
+					<dl class="mt20">
+						<dt>ログインID(メールアドレス)</dt>
+						<dd><input name="email" type="email" class="w100" value="{$input_data.email}"></dd>
+						<dt>パスワード</dt>
+						<dd><input name="password" type="password" class="w100" value="{$input_data.password}"></dd>
+					</dl>
+					<input type="submit" name="submit" class="btn w100 mt20 btn-lg" value="ログイン">
+				</div>
+			</form>
+			</div>
+
+			<div class="box-half clearfix fr heightLine-group1">
+			<form action="/reserve/list/" method="post">
+				<div class="box-inner">
+				<h2>初めての方</h2>
+					<p>お客様情報を登録して予約します。<br>次回からはログインID(メールアドレス)とパスワードの入力だけで予約が可能です。</p>
+					<input type="submit" class="btn w100 mt50 btn-lg" value="予約する">
+				</div>
+			</form>
+			</div>
+
+		</div>
+		<div id="push"></div>
+	</div><!-- / #wrap -->
+	<p id="page-top" style="display: block;">
+		<a href="#wrap"><span><i class="fa fa-arrow-up fa-4x"></i></span></a>
+	</p>
+{include file="footer.tpl"}
+
+</body>
+</html>
+
+
