@@ -8,6 +8,7 @@ class SiteConfigController extends AppRootController {
 		parent::__construct();
 //		require_once sprintf("%s/structure/SiteConfig.class.php", MODEL_PATH);
 		require_once sprintf("%s/dao/SiteConfigDao.class.php", MODEL_PATH);
+        ///ok
 	}
 
 	// トップページ表示
